@@ -12,7 +12,7 @@ Written by Leon Lam
 
 char * get_card(){
     /*
-    Prompts the user for a card name and returns it.
+    Prompts the user for a card name and returns it as an array (I think that's what the asterisk means, this was mainly trial and error).
     */
     static char card_name[3];
     puts("Enter the card_name: ");
@@ -22,36 +22,36 @@ char * get_card(){
 
 
 int print_count(char *card_name, int count){ 
-/* 
-Takes in a character array *card_name and the current count as an integer, updates the new count and prints it. 
-*/
-int val = 0;
-switch(card_name[0]) {
-    case 'K':
-    case 'Q':
-    case 'J':
-        val = 10;
-        break;
-    case 'A':
-        val = 11;
-        break;
-    case 'X':
-        val = -100;
-        break;
-    default:
-        val = atoi(card_name);
-        if(val<=1 || val>10){
-            puts("I don't understand that value");
-            return count;
-        }
-}
-if((val>=2) && (val<=7)) {
-    count++;
-} else if (val >= 10) {
-    count--;
-}
-printf("Current count: %i\n", count);
-return count;
+    /* 
+    Takes in a character array *card_name and the current count as an integer, updates the new count and prints it. 
+    */
+    int val = 0;
+    switch(card_name[0]) {
+        case 'K':
+        case 'Q':
+        case 'J':
+            val = 10;
+            break;
+        case 'A':
+            val = 11;
+            break;
+        case 'X':
+            val = -100;
+            break;
+        default:
+            val = atoi(card_name);
+            if(val<=1 || val>10){
+                puts("I don't understand that value");
+                return count;
+            }
+    }
+    if((val>=2) && (val<=7)) {
+        count++;
+    } else if (val >= 10) {
+        count--;
+    }
+    printf("Current count: %i\n", count);
+    return count;
 }
 
 

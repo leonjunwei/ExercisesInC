@@ -1,27 +1,59 @@
 	.file	"hello.c"
-	.section	.rodata.str1.1,"aMS",@progbits,1
+	.text
+	.globl	add
+	.type	add, @function
+add:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	%edi, -4(%rbp)
+	movl	%esi, -8(%rbp)
+	movl	-8(%rbp), %eax
+	movl	-4(%rbp), %edx
+	addl	%edx, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	add, .-add
+	.section	.rodata
 .LC0:
-	.string	"%i"
-	.section	.text.startup,"ax",@progbits
-	.p2align 4,,15
+	.string	"%d\n"
+	.text
 	.globl	main
 	.type	main, @function
 main:
-.LFB24:
+.LFB1:
 	.cfi_startproc
-	subq	$8, %rsp
+	pushq	%rbp
 	.cfi_def_cfa_offset 16
-	movl	$6, %edx
-	movl	$.LC0, %esi
-	movl	$1, %edi
-	xorl	%eax, %eax
-	call	__printf_chk
-	xorl	%eax, %eax
-	addq	$8, %rsp
-	.cfi_def_cfa_offset 8
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	$5, -8(%rbp)
+	movl	-8(%rbp), %eax
+	addl	$1, %eax
+	movl	%eax, -4(%rbp)
+	movl	$3, %esi
+	movl	$2, %edi
+	call	add
+	movl	-4(%rbp), %eax
+	movl	%eax, %esi
+	movl	$.LC0, %edi
+	movl	$0, %eax
+	call	printf
+	movl	$0, %eax
+	leave
+	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE24:
+.LFE1:
 	.size	main, .-main
 	.ident	"GCC: (Ubuntu 4.8.4-2ubuntu1~14.04.1) 4.8.4"
 	.section	.note.GNU-stack,"",@progbits

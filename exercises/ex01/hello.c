@@ -1,20 +1,21 @@
 #include <stdio.h>
 
+int add(int x, int y){
+    return x+y;
+}
+
+
+
 int main() {
     int x = 5;
     int y = x + 1;
-    printf("%i",y);
+    printf("%d\n",y);
     return 0;
 }
 
 
 /*
 The unoptimized assembly code for the "Hello, World" printer had a line "movl    $5, -4(%rbp)" that wasn't there before I added "int x = 5". This line disappeared in the optimized assembly code for the "Hello, World" printer, probably because we never use x.
-
-
-When optimizing all files, the assembly code got shorter. I'm not sure what exactly happened. The references to %rbp and %rsp became much less frequent, and we see things like %eax and %edi instead. According to 15s on google, rbp and rsp have to do with the stack frame and eax and edi are accumulator registers of some sort.
-
-Is the optimizer making some adjustments to where in memory the information should be stored? I don't know.
 
 
 When we made y = x + 1, in the unoptimized code we see some stuff corresponding to the storage of x = 5, a calculation of 5+1 and then storing y = x+1 = 6. In the optimized code, we start right away with storing y = 6.
