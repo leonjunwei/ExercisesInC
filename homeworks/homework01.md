@@ -23,5 +23,7 @@
 
 6) If you spell a variable name wrong, or if you spell a function name wrong, the error messages 
 you get might look very different.  Why?
-
+ * My best guess is that the program that checks for function names (linker) is different from the one that checks for variable names (compiler)?
+ 
 7) What is a segmentation fault?
+ * An error that occurs when a program tries to read from or write to an illegal location in memory.
