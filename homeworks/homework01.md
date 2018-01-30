@@ -17,7 +17,9 @@
   * Calling a function with the wrong number or type of arguments
 
 4) What are two reasons you might want to turn off code optimization?
-
+ * (Forgot to answer this question) - optimization might break something in the program
+ * Also optimization might make subtle changes in a running program that make it harder to debug. 
+ 
 5) When you run `gcc` with `-S`, why might the results look different on different computers?
   * gcc is apparently configured to generate code for the machine it's run on.
 
