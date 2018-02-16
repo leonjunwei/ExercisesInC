@@ -27,10 +27,41 @@ returns: 1 if true, 0 otherwise
 */
 int endswith(char *s, char *suffix)
 {
+    // int res;
     // TODO: Fill this in!
-    return 0;
+    int diff = strlen(s)-strlen(suffix);
+    if (diff < 0) return 0;
+    else if (strcmp(s+diff,suffix) == 0) {
+            return 1;
+        } else {
+            return 0;
+        };
+
+    // if (strlen(s)<strlen(suffix)){
+    //     // res = 0;
+    //     return 0;
+    // }
+
+    // else if (strlen(s)==strlen(suffix)) {
+    //     if (strcmp(s,suffix)==0) {
+    //         // res = 1;
+    //         return 1;
+    //     } else {
+    //         // res = 0;
+    //         return 0;
+    //     }
+    // } else {
+    //     // res = endswith(s+1, suffix);
+    //     return endswith(s+1, suffix);
+    // }
+
+    // return res;
 }
 
+
+// int test(int* stuff) {
+//     return stuff;
+// }
 
 /* test_endswith
 */
@@ -50,4 +81,6 @@ int main (int argc, char *argv[])
     // test_endswith("endswith", "", ?);
 
     printf("All tests passed\n");
+
+    // printf("%d\n", test(10));
 }
