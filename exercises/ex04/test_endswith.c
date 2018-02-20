@@ -12,6 +12,14 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include "endswith.h"
 #include "minunit.h"
 
+
+/*
+
+gcc test_endswith.c endswith.c -o test_endswith && ./test_endswith
+
+*/
+
+
 int tests_run = 0;
 
 static char *test1() {

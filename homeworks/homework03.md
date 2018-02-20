@@ -5,7 +5,7 @@
 Modify the link below so it points to the `ex02.5` directory in your
 student repository.
 
-[Here is a link to the ex02.5 directory in my repository](https://github.com/YOUR_GITHUB_USERNAME_HERE/ExercisesInC/tree/master/exercises/ex02.5)
+[Here is a link to the ex02.5 directory in my repository](https://github.com/leonjunwei/ExercisesInC/tree/master/exercises/ex02.5)
 
 ### Think OS Chapter 3 reading questions
 
