@@ -5,6 +5,7 @@ License: MIT License https://opensource.org/licenses/MIT
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 // generate a random float using the algorithm described
 // at http://allendowney.com/research/rand
@@ -61,6 +62,45 @@ float my_random_float2()
             break;
         }
     }
+    
+    // find the location of the first set bit and compute the exponent
+    while (x & mask) {
+        mask <<= 1;
+        exp--;
+    }
+    // use the remaining bit as the mantissa
+    mant = x >> 8;
+    b.i = (exp << 23) | mant;
+    return b.f;
+}
+
+// compute a random double using my algorithm
+double my_random_double()
+{
+    long x;
+    int y;
+    long mant;
+    long exp = 1022;
+    long mask = 1;
+
+    union {
+        double f;
+        long i;
+    } b;
+
+    // generate random bits until we see the first set bit
+    while (1) {
+        x = random()<<32;
+        y = random();
+
+        x = x+y;
+
+        if (x == 0) {
+            exp -= 63;
+        } else {
+            break;
+        }
+    }
 
     // find the location of the first set bit and compute the exponent
     while (x & mask) {
@@ -69,16 +109,10 @@ float my_random_float2()
     }
 
     // use the remaining bit as the mantissa
-    mant = x >> 8;
-    b.i = (exp << 23) | mant;
+    mant = x >> 11;
+    b.i = (exp << 52) | mant;
 
     return b.f;
-}
-
-// compute a random double using my algorithm
-double my_random_double()
-{
-    // TODO: fill this in
 }
 
 // return a constant (this is a dummy function for time trials)

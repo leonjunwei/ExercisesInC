@@ -18,4 +18,3 @@ float random_float();
   
 float random_double();
 
-
