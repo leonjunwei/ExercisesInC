@@ -35,6 +35,6 @@ IEEE floating-point.  What would you get if you accidentally interpreted this va
 As a challenge, you can make a faster version by reading the string 32 or 64 bits at a time, rather than one
 character at a time.  This optimization is made easier if the length of the string is a multiple of 4 or 8 bytes.
 
-* call char ^ 0b100000 for each char in the string and save that to a malloc() array.
+* char ^ 0b100000 for each char in the string and save that to a malloc() array.
 
 
