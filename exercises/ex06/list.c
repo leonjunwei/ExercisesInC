@@ -31,6 +31,11 @@ Node *make_node(int val, Node *next) {
 }
 
 
+
+void free_node(Node* node) {
+    free(node);
+}
+
 /* Prints the values in a list.
 *
 * list: pointer to pointer to Node
@@ -54,8 +59,17 @@ void print_list(Node **list) {
 * returns: int or -1 if the list is empty
 */
 int pop(Node **list) {
-    // FILL THIS IN!
-    return 0;
+    Node* head = *list;
+    int retval = head->val;
+    
+    free_node(*list);
+    *list = head->next;
+    
+    if (list == NULL) {
+        return -1;
+    } else {
+    return retval;
+    }
 }
 
 
@@ -65,6 +79,8 @@ int pop(Node **list) {
 * val: value to add
 */
 void push(Node **list, int val) {
+    Node* new_first = make_node(val, *list);
+    *list = new_first;
     // FILL THIS IN!
 }
 
@@ -80,7 +96,28 @@ void push(Node **list, int val) {
 */
 int remove_by_value(Node **list, int val) {
     // FILL THIS IN!
-    return 0;
+    int count = 0;
+    Node *current = *list;
+    Node *nextNode = current->next; 
+
+    if(current->val == val) {
+        pop(list);
+        count++;
+    }
+
+    while (nextNode != NULL) {
+        if (nextNode->val == val) {
+            current->next = nextNode->next;
+            free_node(nextNode);
+            count++;
+        }
+        else {
+        current = nextNode;
+        nextNode = nextNode->next;
+        }
+    }
+    return count;
+
 }
 
 
@@ -90,8 +127,25 @@ int remove_by_value(Node **list, int val) {
 *
 * list: pointer to pointer to Node
 */
-void reverse(Node **list) {
+Node* reverseHelper(Node* node1, Node* node2) {
+    Node * retval = node2->next;
+    node2->next = node1;
+    return retval;
+}
+
+void reverse(Node **list) { /*Looked up an implementation on the internet for non-recursive version*/
     // FILL THIS IN!
+    Node* current = *list;
+    Node* prev = NULL;
+    Node* next = NULL;
+
+    while(current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    *list = prev;
 }
 
 
@@ -100,6 +154,7 @@ int main() {
     head->next = make_node(2, NULL);
     head->next->next = make_node(3, NULL);
     head->next->next->next = make_node(4, NULL);
+    head->next->next->next->next = make_node(3, NULL);
 
     Node **list = &head;
     print_list(list);
@@ -110,10 +165,12 @@ int main() {
     push(list, retval+10);
     print_list(list);
 
-    remove_by_value(list, 3);
+    int num_removed = remove_by_value(list, 3);
+    printf("num_removed: %i\n", num_removed);
     print_list(list);
 
-    remove_by_value(list, 7);
+    num_removed = remove_by_value(list, 7);
+    printf("num_removed: %i\n", num_removed);
     print_list(list);
 
     reverse(list);

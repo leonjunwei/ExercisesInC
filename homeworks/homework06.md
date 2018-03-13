@@ -36,6 +36,8 @@ e) Failing to free a chunk that is no longer needed.
 to see a list of processes sorted by RSS, which is "resident set size", the amount of physical 
 memory a process has.  Which processes are using the most memory?
 
+* compiz and root
+
 4) What's wrong with allocating a large number of small chunks?  What can you do to mitigate the problem?
 
 If you want to know more about how malloc works, read 
