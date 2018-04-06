@@ -63,7 +63,7 @@ of row i is 0.
 void reduce_matrix_rows(Matrix *matrix, int i, int j) {
     // TODO: Fill this in.
     double reduce_factor;
-    if (matrix->rows[i][0] == 0) {
+    if (matrix->rows[i][0] == 0 || matrix->rows[j][0] == 0) {
         return;
     } else {
         reduce_factor = matrix->rows[i][0] / matrix->rows[j][0];
