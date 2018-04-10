@@ -18,7 +18,7 @@ License: MIT License https://opensource.org/licenses/MIT
 // errno is an external global variable that contains
 // error information
 extern int errno;
-
+int m = 3;
 
 // get_seconds returns the number of seconds since the
 // beginning of the day, with microsecond precision
@@ -29,11 +29,23 @@ double get_seconds() {
     return tv->tv_sec + tv->tv_usec / 1e6;
 }
 
-
-void child_code(int i)
+/*
+As far as I can tell, only global variables are shared. Stack and heap variables don't seem to be shared.
+    Editing a stack or heap variable in one child process doesn't change it for the rest. Is it something to do with Copy On Write?
+*/
+void child_code(int i, int* k, int j)
 {
     sleep(i);
-    printf("Hello from child %d.\n", i);
+    printf("Global variable m has address %i.\n", &m); //Checks for shared global variable
+    j++;
+    printf("Stack variable j has value %i.\n", j); //Checks if stack variables are shared
+    if (i==0) {
+        *k = 1;
+        printf("Writing k in heap to 1 at location %i.\n", k); //tries to edit a heap-allocated int
+    } else {
+        printf("Reading k at location %i. Value is %i.\n", k, *k); //tries to read the heap-allocated int
+    }
+    printf("get_seconds is a function at location %i\n", get_seconds);
 }
 
 // main takes two parameters: argc is the number of command-line
@@ -45,6 +57,8 @@ int main(int argc, char *argv[])
     pid_t pid;
     double start, stop;
     int i, num_children;
+    int* k = (int*)malloc(sizeof(int));
+    *k = 0;
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -72,7 +86,7 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, k, 0);
             exit(i);
         }
     }
