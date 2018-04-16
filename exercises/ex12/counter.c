@@ -73,7 +73,9 @@ void join_thread(pthread_t thread)
 */
 void child_code(Shared *shared)
 {
-    printf("counter = %d\n", shared->counter);
+    // printf("counter = %d\n", shared->counter);
+    int i = 0;
+    printf("%p\n",&i);
     shared->counter++;
 }
 

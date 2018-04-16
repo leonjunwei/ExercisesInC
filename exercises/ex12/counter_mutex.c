@@ -8,6 +8,7 @@ License: GNU GPLv3
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include "mutex.c"
 
 #define NUM_CHILDREN 2
 
@@ -30,6 +31,7 @@ typedef struct {
   int counter;
   int end;
   int *array;
+  Mutex * mutex;
 } Shared;
 
 Shared *make_shared(int end)
@@ -41,6 +43,7 @@ Shared *make_shared(int end)
   shared->end = end;
 
   shared->array = check_malloc(shared->end * sizeof(int));
+  shared->mutex = make_mutex();
   for (i=0; i<shared->end; i++) {
     shared->array[i] = 0;
   }
@@ -75,8 +78,10 @@ void child_code(Shared *shared)
     if (shared->counter >= shared->end) {
       return;
     }
+    mutex_lock(shared->mutex);
     shared->array[shared->counter]++;
     shared->counter++;
+    mutex_unlock(shared->mutex);
 
     if (shared->counter % 10000 == 0) {
       // printf("%d\n", shared->counter);
