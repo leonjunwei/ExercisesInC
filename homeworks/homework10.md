@@ -5,7 +5,7 @@
 Modify the link below so it points to the `ex12` directory in your
 student repository.  That's right, Homework 10 is to do Exercise 12.
 
-[Here is a link to the ex12 directory in my repository](https://github.com/YOUR_GITHUB_USERNAME_HERE/ExercisesInC/tree/master/exercises/ex12)
+[Here is a link to the ex12 directory in my repository](https://github.com/leonjunwei/ExercisesInC/tree/master/exercises/ex12)
 
 ### Think OS Chapter 10 reading questions
 
