@@ -107,6 +107,7 @@ void check_array(Shared *shared)
     if (shared->array[i] != 1) errors++;
   }
   // printf("%d errors.\n", errors);
+
 }
 
 int main()
