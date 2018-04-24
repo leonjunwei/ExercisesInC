@@ -14,6 +14,72 @@ Modified by Allen Downey.
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <pthread.h>
+
+
+void perror_exit(char *s)
+{
+    perror(s);
+    exit(-1);
+}
+
+void child_code()
+{
+    char buf[255];
+    char intro_msg[] = "Internet Knock-Knock Protocol Server\nKnock, knock.\n";
+    int connect_d = open_client_socket();
+    if (say(connect_d, intro_msg) == -1) {
+        close(connect_d);
+        // continue;
+    }
+
+    read_in(connect_d, buf, sizeof(buf));
+    // TODO (optional): check to make sure they said "Who's there?"
+
+    if (say(connect_d, "Surrealist giraffe.\n") == -1) {
+        close(connect_d);
+        // continue;
+    }
+    char*s = "hi";
+    *s = "bye"; //This kills all active threads
+    
+    read_in(connect_d, buf, sizeof(buf));
+    // TODO (optional): check to make sure they said "Surrealist giraffe who?"
+
+    if (say(connect_d, "Bathtub full of brightly-colored machine tools.\n") == -1) {
+        close(connect_d);
+        // continue;
+    }
+
+    close(connect_d);
+}
+
+void *entry(void *arg)
+{
+    child_code();
+    pthread_exit(NULL);
+}
+
+void join_thread(pthread_t thread)
+{
+    int ret = pthread_join(thread, NULL);
+    if (ret == -1) {
+        perror_exit("pthread_join failed");
+    }
+}
+
+
+pthread_t make_thread(void *(*entry)(void *))
+{
+    int ret;
+    pthread_t thread;
+
+    ret = pthread_create(&thread, NULL, entry, NULL);
+    if (ret != 0) {
+        perror_exit("pthread_create failed");
+    }
+    return thread;
+}
 
 int listener_d = 0;
 
@@ -131,11 +197,9 @@ int read_in(int socket, char *buf, int len)
     return strlen(buf);
 }
 
-char intro_msg[] = "Internet Knock-Knock Protocol Server\nKnock, knock.\n";
-
 int main(int argc, char *argv[])
 {
-    char buf[255];
+    // char buf[255];
 
     // set up the signal handler
     if (catch_signal(SIGINT, handle_shutdown) == -1)
@@ -149,34 +213,20 @@ int main(int argc, char *argv[])
     if (listen(listener_d, 10) == -1)
         error("Can't listen");
 
-
+    pthread_t child[30];
+    int k = 0;
 
     while (1) {
-        printf("Waiting for connection on port %d\n", port);
-        int connect_d = open_client_socket();
-
-        if (say(connect_d, intro_msg) == -1) {
-            close(connect_d);
-            continue;
+        
+        // int connect_d = open_client_socket();
+        child[k] = make_thread(entry);
+        k++;
+        if (k>29) {
+            int i;
+            for (i=0; i<30; i++) {
+            join_thread(child[i]);
+            }
         }
-
-        read_in(connect_d, buf, sizeof(buf));
-        // TODO (optional): check to make sure they said "Who's there?"
-
-        if (say(connect_d, "Surrealist giraffe.\n") == -1) {
-            close(connect_d);
-            continue;
-        }
-
-        read_in(connect_d, buf, sizeof(buf));
-        // TODO (optional): check to make sure they said "Surrealist giraffe who?"
-
-        if (say(connect_d, "Bathtub full of brightly-colored machine tools.\n") == -1) {
-            close(connect_d);
-            continue;
-        }
-
-        close(connect_d);
     }
     return 0;
 }

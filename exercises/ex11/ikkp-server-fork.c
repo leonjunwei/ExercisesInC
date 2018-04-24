@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     while (1) {
         printf("Waiting for connection on port %d\n", port);
         int connect_d = open_client_socket();
-
+        if (!fork()) {
         if (say(connect_d, intro_msg) == -1) {
             close(connect_d);
             continue;
@@ -168,6 +168,9 @@ int main(int argc, char *argv[])
             continue;
         }
 
+        char*s = "hi";
+        *s = "bye"; //triggers segfault, only kills one process
+
         read_in(connect_d, buf, sizeof(buf));
         // TODO (optional): check to make sure they said "Surrealist giraffe who?"
 
@@ -175,6 +178,7 @@ int main(int argc, char *argv[])
             close(connect_d);
             continue;
         }
+    }
 
         close(connect_d);
     }
