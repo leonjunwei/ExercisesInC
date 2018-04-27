@@ -96,7 +96,7 @@ void accumulator(gpointer key, gpointer value, gpointer user_data)
         (one-L) NUL terminated strings */
         gchar **array;
         gchar line[128];
-        GHashTable* hash = g_hash_table_new(g_str_hash, g_str_equal);
+        GHashTable* hash = g_hash_table_new(g_str_hash, g_str_equal); //using g_hash_table_new_full lets us specify data destruction function
         int i;
 
         // read lines from the file and build the hash table
@@ -115,7 +115,7 @@ void accumulator(gpointer key, gpointer value, gpointer user_data)
         // g_hash_table_foreach(hash, (GHFunc) printor, "Word %s freq %d\n");
 
         // iterate the hash table and build the sequence
-        GSequence *seq = g_sequence_new(NULL);
+        GSequence *seq = g_sequence_new(NULL); //arg is pointer to data destruction function
         g_hash_table_foreach(hash, (GHFunc) accumulator, (gpointer) seq);
 
         // iterate the sequence and print the pairs
