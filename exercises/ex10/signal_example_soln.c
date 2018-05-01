@@ -33,37 +33,6 @@ int catch_signal(int sig, void (*handler) (int)) {
     return sigaction(sig, &action, NULL);
 }
 
-
-
-
-void handle_single_question(void){
-    int a, b, answer;
-    char txt[4];
-
-    // seed the random number generator
-    srandom((unsigned int) time(NULL));
-
-            // pose the question
-        a = rand() % 11;
-        b = rand() % 11;
-        printf("\nWhat is %d times %d? ", a, b);
-
-
-
-        // get the answer
-        char *ret = fgets(txt, 4, stdin);
-        answer = atoi(txt);
-
-        // check the answer
-        if (answer == a * b) {
-            printf("\nRight!\n");
-            score++;
-        } else {
-            printf("\nWrong!\n");
-        }
-        printf("Score: %i\n", score);
-}
-
 /* Signal handler: End the game.
  */
 void end_game(int sig)
@@ -72,16 +41,19 @@ void end_game(int sig)
     exit(EXIT_SUCCESS);
 }
 
+int end_flag = 0;
+
 /* Signal handler: Notify the user and raise SIGINT.
 */
 void times_up(int sig) {
-    handle_single_question();
-    puts("\nTIME'S UP!");
-    raise(SIGINT);
+    //puts("\nTIME'S UP!");
+    //raise(SIGINT);
+    end_flag = 1;
 }
 
 int main(void) {
-
+    int a, b, answer;
+    char txt[4];
 
     // when the alarm goes off, call times_up
     catch_signal(SIGALRM, times_up);
@@ -89,16 +61,32 @@ int main(void) {
     // if we get interrupted, end the game
     catch_signal(SIGINT, end_game);
 
-
+    // seed the random number generator
+    srandom((unsigned int) time(NULL));
 
     while(1) {
+        a = rand() % 11;
+        b = rand() % 11;
+        printf("\nWhat is %d times %d? ", a, b);
 
-        // set (or reset) the alarm
         alarm(5);
-        handle_single_question();
+	    while (1) {
+	        char *ret = fgets(txt, 4, stdin);
+	        if (ret) break;
+	    }
 
+        answer = atoi(txt);
+        if (answer == a * b) {
+            printf("\nRight!\n");
+            score++;
+        } else {
+            printf("\nWrong!\n");
+        }
+        printf("Score: %i\n", score);
+
+	    if (end_flag) {
+	        end_game(0);
+	    }
     }
-
-
     return 0;
 }
